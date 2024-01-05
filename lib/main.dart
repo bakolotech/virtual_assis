@@ -3,27 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:untitled/signaling.dart';
 
-await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentFlateform
-);
-
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your Application
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Assistant Virtuel',
       theme: ThemeData(
-              primarySwatch: Colors.blue,
+        primarySwatch: Colors.blue,
       ),
       home: MyHomePage(),
-    ); // MaterialApp
+    );
   }
 }
 
@@ -43,19 +38,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    super.initState();
     _localRenderer.initialize();
     _remoteRenderer.initialize();
 
-    signaling.onAddRemoteStream = ((stream){
+    signaling.onAddRemoteStream = (MediaStream stream) {
       _remoteRenderer.srcObject = stream;
       setState(() {});
-    });
-
-    super.initState();
+    };
   }
 
   @override
-  void dispose(){
+  void dispose() {
     _localRenderer.dispose();
     _remoteRenderer.dispose();
     super.dispose();
@@ -76,27 +70,27 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                  onPressed: () {
-                    signaling.openUserMedia(_localRenderer, _remoteRenderer);
-                  },
+                onPressed: () {
+                  signaling.openUserMedia(_localRenderer, _remoteRenderer);
+                },
                 child: Text('Open camera & microphone'),
               ),
               SizedBox(
                 width: 8,
               ),
               ElevatedButton(
-                  onPressed: () {
-                    signaling.join(textEditingController.text);
-                  },
+                onPressed: () {
+                  signaling.join(textEditingController.text);
+                },
                 child: Text('Join room'),
               ),
               SizedBox(
                 width: 8,
               ),
               ElevatedButton(
-                  onPressed: () {
-                    signaling.hangUp(_localRenderer)
-                  },
+                onPressed: () {
+                  signaling.hangUp(_localRenderer);
+                },
                 child: Text('Hangup'),
               )
             ],
@@ -107,36 +101,39 @@ class _MyHomePageState extends State<MyHomePage> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Row(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(child: RTCVideoView(_localRenderer, mirror: true)),
-                  Expanded(child: RTCVideoView(_remoteRenderer)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(child: RTCVideoView(_localRenderer, mirror: true)),
+                      Expanded(child: RTCVideoView(_remoteRenderer)),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Join the following room'),
+                      Flexible(
+                        child: TextFormField(
+                          controller: textEditingController,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
-            child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Join the following room'),
-                    Flexible(
-                        child: TextFormField(
-                          controller: textEditingController,
-                        )
-                    )
-                  ],
-                ),
-              ),
           ),
           SizedBox(
             height: 8,
-          )
-          )
+          ),
         ],
       ),
-
     );
   }
 }

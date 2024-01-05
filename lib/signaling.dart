@@ -5,7 +5,7 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 typedef void StreamStateCallback(MediaStream stream);
 
 class Signaling {
-  
+
   Map<String, dynamic> configuration = {
     'iceServers': [
       {'urls': ['stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302']}
@@ -25,6 +25,7 @@ class Signaling {
     print('Create PeerConnection with configuration: $configuration');
 
     peerConnection = await createPeerConnection(configuration);
+
     registerPeerConnectionListeners();
 
     localStream?.getTracks().forEach((track) {
@@ -86,6 +87,7 @@ class Signaling {
   }
 
   Future<void> joinRoom(String roomId) async {
+
     FirebaseFirestore db = FirebaseFirestore.instance;
     DocumentReference roomRef = db.collection('rooms').doc('$roomId');
     var roomSnapshot = await roomRef.get();
@@ -93,6 +95,7 @@ class Signaling {
     print('Got room ${roomSnapshot.exists}');
 
     if (roomSnapshot.exists) {
+      
       print('Create PeerConnection with configuration: $configuration');
       peerConnection = await createPeerConnection(configuration);
 
