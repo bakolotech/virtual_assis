@@ -80,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  signaling.join(textEditingController.text);
+                  signaling.joinRoom(textEditingController.text);
                 },
                 child: Text('Join room'),
               ),

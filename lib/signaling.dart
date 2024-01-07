@@ -92,11 +92,11 @@ class Signaling {
     DocumentReference roomRef = db.collection('rooms').doc('$roomId');
     var roomSnapshot = await roomRef.get();
 
-    print('Got room ${roomSnapshot.exists}');
+    // print('Got room ${roomSnapshot.exists}');
 
     if (roomSnapshot.exists) {
       
-      print('Create PeerConnection with configuration: $configuration');
+      // print('Create PeerConnection with configuration: $configuration');
       peerConnection = await createPeerConnection(configuration);
 
       registerPeerConnectionListeners();
@@ -213,7 +213,7 @@ class Signaling {
     };
 
     peerConnection?.onIceGatheringState =
-        (RTCIceGathering state) {
+        (RTCIceGatheringState state) {
       print('ICE connection state change: $state');
     };
 
